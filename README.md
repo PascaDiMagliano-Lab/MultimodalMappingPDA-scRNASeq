@@ -1,4 +1,4 @@
-# Human-scRNASeq-paper1
+# MultimodalMappingPDA-scRNASeq
 
 Processed data and downstream analysis of scRNA Seq experiments for the paper Multimodal Mapping of the Immune Landscape in Human Pancreatic Cancer. 
 
@@ -8,4 +8,4 @@ To replicate the analysis, load the R script into R Studio and load the data int
 
 • Veerin Sirihorachai 
 
-• July 31, 2019
+• August 2nd, 2020
