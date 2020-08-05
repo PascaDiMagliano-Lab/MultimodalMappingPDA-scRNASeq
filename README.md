@@ -7,4 +7,4 @@ To replicate the analysis, load the R script into R Studio and load the data int
 
 • Veerin Sirihorachai 
 
-• August 2nd, 2020
+• August 3rd, 2020
