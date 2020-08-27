@@ -505,7 +505,7 @@ CircosFunctions <- function(InteractomeData, SeuratObject, CellTypeVector, POI, 
   #1 - CD8 T Cells
   #2 - CD4 T Cells
   #3 - T Cells
-  #4 - myCAF Fibroblasts
+  #4 - Pericytess
   #5 - iCAF Fibroblasts
   #6 - Fibroblasts
   #7 - Epithelial
@@ -1291,9 +1291,9 @@ levels(TotalTissue.combined.harmony)
 
 current.cluster.ids <- c(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50)
 new.cluster.ids <- c("CD4 T Cells","CD8 T Cells","Macrophage","Epithelial","Epithelial","Epithelial", "Granulocyte","Macrophage","Granulocyte","Mast Cells","Macrophage","Acinar",
-                     "Macrophage","NK Cells", "Plasma Cells","iCAF Fibroblast","Epithelial","Junk","Acinar", "Epithelial", "B Cells","Macrophage","iCAF Fibroblast","Epithelial","T Reg",
-                     "myCAF Fibroblast", "Acinar", "Epithelial", "Epithelial", "Cycling", "Endothelial", "CD8 T Cells", 
-                     "Epithelial", "Epithelial", "Dendritic Cell", "myCAF Fibroblast", "CD8 T Cells", "Granulocyte", "Cycling", "Macrophage", "Junk", "Junk", "RBC", "Dendritic Cell", "Endocrine", 
+                     "Macrophage","NK Cells", "Plasma Cells","Fibroblasts","Epithelial","Junk","Acinar", "Epithelial", "B Cells","Macrophage","Fibroblasts","Epithelial","T Reg",
+                     "Pericytes", "Acinar", "Epithelial", "Epithelial", "Cycling", "Endothelial", "CD8 T Cells", 
+                     "Epithelial", "Epithelial", "Dendritic Cell", "Pericytes", "CD8 T Cells", "Granulocyte", "Cycling", "Macrophage", "Junk", "Junk", "RBC", "Dendritic Cell", "Endocrine", 
                      "Epithelial", "Endothelial", "Epithelial", "Epithelial", "Epithelial", "Plasma Cells")
 names(x = new.cluster.ids) <- levels(x = TotalTissue.combined.harmony)
 TotalTissue.combined.harmony <- RenameIdents(object = TotalTissue.combined.harmony, new.cluster.ids)
@@ -1545,11 +1545,11 @@ write.csv(Myeloid.markers, file = "~/Desktop/Myeloidcellmarkers.csv")
 Idents(Myeloid_subset) <- "Myeloid_subset_clusters_numbered"
 levels(Myeloid_subset)
 current.cluster.ids <- c(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20)
-new.cluster.ids <- c("Granulocyte 1", "Classical Macrophages (CCR2+)", "Resident Macrophages", "Alternatively Activated Macrophages","Alternatively Activated Macrophages", 
-                     "Granulocyte 1", "Classical Macrophages (CCR2+)", "Granulocyte 1", "Alternatively Activated Macrophages", "Classical Macrophages (CCR2+)", 
-                     "Classical Macrophages (CCR2+)", "Granulocyte 1", "Junk", "Junk", "Granulocyte 1", "Alternatively Activated Macrophages",
-                     "Macrophage", "Alternatively Activated Macrophages","Resident Macrophages",
-                     "Granulocyte 1","Alternatively Activated Macrophages","Junk","Granulocyte 2","Junk", "Mast Cells")
+new.cluster.ids <- c("Granulocyte 1", "Classical Monocytes", "Resident Macrophages", "Alternatively Activated Macrophages 1","Alternatively Activated Macrophages 1", 
+                     "Granulocyte 1", "Classical Monocytes", "Granulocyte 1", "Alternatively Activated Macrophages 1", "Classical Monocytes", 
+                     "Classical Monocytes", "Granulocyte 1", "Junk", "Junk", "Granulocyte 1", "Alternatively Activated Macrophages",
+                     "Macrophage", "Alternatively Activated Macrophages 2","Resident Macrophages",
+                     "Granulocyte 1","Alternatively Activated Macrophages 1","Junk","Granulocyte 2","Junk", "Mast Cells")
 names(x = new.cluster.ids) <- levels(x = Myeloid_subset)
 Myeloid_subset <- RenameIdents(object = Myeloid_subset, new.cluster.ids)
 
@@ -1972,7 +1972,7 @@ write.csv(node_supplement, file = 'human_pda_tissue_LR_names.csv', row.names = F
 
 # Figure 2A
 
-Idents(TotalTissue.combined.harmony_fil) <- "Collapsed_labels"
+Idents(TotalTissue.combined.harmony_fil) <- "Expanded_labels"
 DimPlot(object = TotalTissue.combined.harmony_fil, reduction = "umap", split.by = "DiseaseState", pt.size = 0.5, label = F, ncol=5, 
         cols = c("CD8 T Cells" = "darkgreen", 
                  "CD4 T Cells" = "limegreen", 
@@ -1984,7 +1984,8 @@ DimPlot(object = TotalTissue.combined.harmony_fil, reduction = "umap", split.by 
                  "NK Cells" = "darkorchid",
                  "B Cells" = "dodgerblue1",
                  "Plasma Cells" = "navy",
-                 "Fibroblasts" = "darkcyan",
+                 "Fibroblasts" = "#018B8B",
+                 "Pericytes" = "#58D0CF",
                  "Acinar" = "deeppink",
                  "Endothelial" = "mediumvioletred",
                  'Epithelial' = "red3",
@@ -1997,23 +1998,157 @@ Idents(TotalTissue.combined.harmony_fil) <- "Collapsed_labels"
 DotPlot(TotalTissue.combined.harmony_fil, features = c('MS4A1', 'CD79A','IGJ','LYZ', 'APOE', 'ITGAM','ITGAX', 'GZMB', 'HLA-DRA', 'CD14', 'CD3D',
                                                        'NKG7','NCAM1', 'CD3E','PDGFRB', 'RGS5', 'IRF7','PLVAP', 'VWF', 'CDH5','TPSAB1', 'CPA3', 'LUM', 'DCN','PRSS1', 'CTRB2',
                                                        'REG1A','SPP1','MMP7', 'CLU','KRT8','KRT19', 'KRT18','TFF1','CCL22','LAMP3')
-        , cols = c('red', 'blue'), dot.scale = 10) + RotatedAxis() + FontSize(x.text = 17, y.text = 17)
+                                        , cols = c('red', 'blue'), dot.scale = 10) + RotatedAxis() + FontSize(x.text = 17, y.text = 17)
 
 # Figure 2C
 
+# pheatmap code
 
+library(Seurat)
+library(dplyr)
+library(magrittr)
+library(data.table)
+library(Matrix)
+library(devtools)
+library(RcppArmadillo)
+library(Rcpp)
+library(harmony)
+library(scales)
+library(pheatmap)
+library(gplots)
+library(ggplot2)
+library(cowplot)
+
+#pheatmap of checkpoints by cell population
+gene_list <- c("CD27", "TNFRSF4", "CTLA4", "ICOS", "CD28", "CD40LG", "CD47", "TIGIT", "TNFRSF18", "CD70", "PDCD1", "LAG3", "CSF1", "CD274", "TNFSF18", "HAVCR2", "SIRPA", "PVR", "ICOSLG", "CD40", "TNFSF4", "LGALS9", "CD80", "HLA-DQA1")
+
+Idents(object = TotalTissue.combined.harmony_fil) <- 'DiseaseState'
+PDATissue.combined.harmony_fil <- subset(x = TotalTissue.combined.harmony_fil, subset = "PDAC")
+tissue_data <- FetchData(PDATissue.combined.harmony_fil, vars = c(gene_list))
+
+tissue_avg <- data.frame()
+n <- 1 # number of metadata columns
+
+for (id in levels(factor(tissue_data$Collapsed_labels_nospaces))) {
+  data_subset <- tissue_data %>% filter(Collapsed_labels_nospaces == id)
+  data_subset_avg <- apply(data_subset[,1:(ncol(data_subset)-n)], 2, mean)
+  tissue_avg <- rbind(tissue_avg, data_subset_avg)
+}
+
+colnames(tissue_avg) <- colnames(tissue_data)[1:(ncol(tissue_data)-n)]
+rownames(tissue_avg) <- levels(factor(tissue_data$Collapsed_labels_nospaces))
+# adding Simple annotations 
+
+metadata <- unique(pbmc_data %>% select('Collapsed_labels_nospaces'))
+#metadata <- metadata[order(metadata$DiseaseState, metadata$Stage, decreasing = T),]
+rownames(metadata) <- metadata$Collapsed_labels_nospaces
+#metadata$Collapsed_labels_nospaces <- NULL
+
+
+
+pheatmap(as.matrix(tissue_avg), fontsize = 14, color = colorRampPalette(colors = c('#0000FF','#FFFFFF','#FF0000'))(250), 
+         border_color = 'black', cellwidth = 20, cellheight = 20, scale = 'column')
 
 # Figure 2D
 
+gene_list <- c("PDCD1","CD47", "CTLA4", "HAVCR2", "TIGIT", "LAG3", "CD28",  "ICOS", "CD40LG", "CD27", "TNFRSF4", "TNFRSF18", "CSF1")
+
+t_cell_data <- FetchData(CD8_T_cell_subset_fil, vars = c(gene_list, 'ID', 'DiseaseState', 'Stage'))
+
+patient_avg <- data.frame()
+n <- 3 # number of metadata columns
+
+for (id in levels(factor(t_cell_data$ID))) {
+  data_subset <- t_cell_data %>% filter(ID == id)
+  data_subset_avg <- apply(data_subset[,1:(ncol(data_subset)-n)], 2, mean)
+  patient_avg <- rbind(patient_avg, data_subset_avg)
+}
+
+colnames(patient_avg) <- colnames(t_cell_data)[1:(ncol(t_cell_data)-n)]
+rownames(patient_avg) <- levels(factor(t_cell_data$ID))
+# adding Simple annotations 
+
+metadata <- unique(t_cell_data %>% select('ID', 'DiseaseState', 'Stage'))
+metadata <- metadata[order(metadata$DiseaseState, metadata$Stage, decreasing = T),]
+rownames(metadata) <- metadata$ID
+metadata$ID <- NULL
+
+my_colour = list(DiseaseState = c(AdjNorm = "#080808", PDAC = "#D8D5D5"),
+                 Stage = c(Resectable = '#33a02c', 
+                           Locally_Advanced = '#b2df8a',
+                           Borderline_Resectable = '#1f78b4',
+                           Metastatic = '#fb9a99', 
+                           `N/A` = '#a6cee3'))
+
+
+pheatmap(as.matrix(patient_avg), fontsize = 14, color = colorRampPalette(colors = c('#0000FF','#FFFFFF','#FF0000'))(250), annotation_row = metadata,
+         annotation_colors = my_colour, border_color = 'black', cellwidth = 20, cellheight = 20, scale = 'column')
 
 
 # Figure 2E
 
+library(clusterProfiler)
+library(enrichplot)
+library(org.Hs.eg.db) #Human data set
+library(DOSE)
+library(dplyr)
 
+Idents(object = CD8_T_cell_subset_fil) <- 'DiseaseState'
+TcellDElist <- FindMarkers(object = CD8_T_cell_subset_fil, test.use = "MAST", only.pos = T, ident.1 = "PDAC", ident.2 = "AdjNorm")
+
+# get positive FC rows
+gene_list <- TcellDElist$gene
+head(gene_list)
+TcellDElist_gene_convert <- bitr(gene_list, fromType = 'SYMBOL', toType = 'ENTREZID', OrgDb = "org.Hs.eg.db", drop = F)
+TcellDElist_gene_convert$SYMBOL[is.na(TcellDElist_gene_convert$ENTREZID)]
+
+
+# KEGG
+z <- enrichKEGG(gene=TcellDElist_gene_convert$ENTREZID, organism = 'hsa', pvalueCutoff = .05)
+z <- setReadable(z, OrgDb = "org.Hs.eg.db", keyType = 'ENTREZID')
+barplot(z, showCategory=20)
+dotplot(z, showCategory=100)
+TcellDE_result <- z@result
+write.csv(TcellDE_result, file = 'TcellDE_result.csv')
 
 # Figure 2F
 
+# clustering/dendogram for heatmap
+#DE genes
+gene_list <- c("TIGIT","EOMES", "CD74", "LTB", "KLF2", "CD52", "GZMA","GZMK","GZMB", "ID2", "NFKBIA", "CD55", "CCL4", "CD69","CXCR4","KLRG1","KLRC2","AREG",
+               "JUNB","ITGB1","KLRD1","TOB1","SAMD3","CCL3", "CCL4L2", "CLDND1", "RGS2", "COTL1", "CMC1", "SYNE1", "GNLY", "GIMAP7", "PHACTR2", "HLA-DRA", "RNF213", "FLNA", "PLEK",
+               "HLA-DPA1", "H1FX","PTGER2","PFN1","PTGER4","GPR183","APBA2","GABARAPL1","HERPUD1","AIM1","PPP1R14B","HLA-DPB1","TMEM173","FAM65B",
+               "PRDM1","DDIT4","GLUL","LIMD2","NKG7","SYTL3","PNLIPRP1","BTG1","TSC22D3")
+t_cell_data <- FetchData(CD8_T_cell_subset_fil, vars = c(gene_list, 'ID', 'DiseaseState', 'Stage'))
 
+patient_avg <- data.frame()
+n <- 3 # number of metadata columns
+
+for (id in levels(factor(t_cell_data$ID))) {
+  data_subset <- t_cell_data %>% filter(ID == id)
+  data_subset_avg <- apply(data_subset[,1:(ncol(data_subset)-n)], 2, mean)
+  patient_avg <- rbind(patient_avg, data_subset_avg)
+}
+
+colnames(patient_avg) <- colnames(t_cell_data)[1:(ncol(t_cell_data)-n)]
+rownames(patient_avg) <- levels(factor(t_cell_data$ID))
+# adding Simple annotations 
+
+metadata <- unique(t_cell_data %>% select('ID', 'DiseaseState', 'Stage'))
+metadata <- metadata[order(metadata$DiseaseState, metadata$Stage, decreasing = T),]
+rownames(metadata) <- metadata$ID
+metadata$ID <- NULL
+
+my_colour = list(DiseaseState = c(AdjNorm = "#080808", PDAC = "#D8D5D5"),
+                 Stage = c(Resectable = '#33a02c', 
+                           Locally_Advanced = '#b2df8a',
+                           Borderline_Resectable = '#1f78b4',
+                           Metastatic = '#fb9a99', 
+                           `N/A` = '#a6cee3'))
+
+
+pheatmap(as.matrix(patient_avg), fontsize = 14, color = colorRampPalette(colors = c('#0000FF','#FFFFFF','#FF0000'))(250), annotation_row = metadata,
+         annotation_colors = my_colour, border_color = 'black', cellwidth = 20, cellheight = 20, scale = 'column')
 
 # Figure 3A
 
@@ -2033,7 +2168,8 @@ DoHeatmap(CD8_T_cell_subset_fil, features = top_10_fil$gene, size = 5.5)
 
 # Figure 3C
 
-
+Idents(CD8_T_cell_subset_fil) <- "CD8_expanded"
+VlnPlot(CD8_T_cell_subset_fil, features = c("PRF1","GZMB","GZMK","EOMES","PDCD1","HAVCR2","LAG3","TIGIT"), cols = c("#FF0095","#008E3B","#009CD2"), pt.size = .25, ncol = 2)
 
 # Figure 3D/Supplementary Figure S4B
 
@@ -2080,7 +2216,40 @@ VlnPlot(NK_cell_filter, features = c("NKG7","TIGIT","FCGR3A","LAG3","NCAM1","PDC
 
 # Figure 4D
 
+#New heatmap with clinical metadata, NK cells all
+gene_list <- c("TIGIT","CD52","EMP3","GZMK","GNLY","BTG2","MAPK1","BTG1","SPON2","SELL","TGFBR3","CD44","KLRC1","MRPS6","CCND2","GZMA","SLFN5","FLNA","CORO1A","STAT1",
+               "ACTB","KLRC2","IGFBP7","FKBP11","IQGAP2","CLIC3","LAIR2","SLA","CLK1","HAVCR2","TNFAIP3","KLK1","CD55","CYTIP","TLE1","SMAP2",
+               "SYCN","CCL4","CXCR4","CCL3","DUSP1","DIP2A","HLA-DRB1","TMIGD2","HSPA1B","SYTL3","TXNIP","CD53","SOCS1")
+nk_cell_data <- FetchData(CD8_T_cell_subset_fil, vars = c(gene_list, 'ID', 'DiseaseState', 'Stage'))
 
+patient_avg <- data.frame()
+n <- 6 # number of metadata columns
+
+for (id in levels(factor(nk_cell_data$ID))) {
+  data_subset <- nk_cell_data %>% filter(ID == id)
+  data_subset_avg <- apply(data_subset[,1:(ncol(data_subset)-n)], 2, mean)
+  patient_avg <- rbind(patient_avg, data_subset_avg)
+}
+
+colnames(patient_avg) <- colnames(nk_cell_data)[1:(ncol(nk_cell_data)-n)]
+rownames(patient_avg) <- levels(factor(nk_cell_data$ID))
+
+# adding n annotations 
+metadata <- unique(nk_cell_data %>% select('ID', 'DiseaseState', 'Stage', 'Recist', 'AliveDead'))
+metadata <- metadata[order(metadata$DiseaseState, metadata$Stage, decreasing = T),]
+rownames(metadata) <- metadata$ID
+metadata$ID <- NULL
+
+my_colour = list(DiseaseState = c(AdjNorm = "#80b1d3", PDAC = "#080808"),
+                 Stage = c(Resectable = '#4daf4a', 
+                           Locally_Advanced = '#984ea3',
+                           Borderline_Resectable = '#377eb8',
+                           Metastatic = '#e41a1c', 
+                           `N/A` = 'gray88'))
+
+
+pheatmap(as.matrix(patient_avg), fontsize = 14, color = colorRampPalette(colors = c('#0000FF','#FFFFFF','#FF0000'))(250), annotation_row = metadata,
+         annotation_colors = my_colour, border_color = 'black', cellwidth = 20, cellheight = 20, scale = 'column')
 
 # Figure 4E
 
@@ -2105,11 +2274,23 @@ FeaturePlot(CD4_Cells_fil, c("CD4","FOXP3","CTLA4","TIGIT"), cols = c('grey77','
 
 # Figure 5A
 
-
+Idents(Myeloid_subset_fil) <- "Myeloid_subset_labels_expanded"
+DimPlot(object = TotalTissue.combined.harmony_fil, reduction = "umap", split.by = "DiseaseState", pt.size = 0.5, label = F, ncol=5, 
+        cols = c(
+          "Granulocyte 1" = "#FFA100", 
+          "Granulocyte 2" = "#FFD700",
+          "Classical Monocytes" = "#3EBAFF",
+          "Alternatively Activated Macrophages 1" = "#FF0095",
+          "Alternatively Activated Macrophages 2" = "#FF0000",
+          "Resident Macrophages" = "#006100"))
 
 # Figure 5B
 
-
+Idents(Myeloid_subset_fil) <- 'Myeloid_subset_labels_expanded'
+Myeloid.markers_fil <- FindAllMarkers(Myeloid_subset_fil)
+write.csv(Myeloid.markers_fil, file = "~/Desktop/Myeloid.markers_fil.csv")
+top_10_fil <- Myeloid.markers_fil%>%group_by(cluster)%>%top_n(n=10, wt = avg_logFC)
+DoHeatmap(Myeloid.markers_fil, features = top_10_fil$gene, size = 5.5)
 
 # Figure 5C
 
@@ -2143,7 +2324,34 @@ VlnPlot(Myeloid_subset_fil, features = c("CLEC9A","BATF3","CD1A","CD207","CCL22"
 
 # Figure 6B
 
+gene_list <- c("CD274","SIRPA", "CD80", "LGALS9", "PVR", "HLA-DQA1",  "ICOSLG", "CD40", "CD70", "TNFSF4", "TNFSF18", "CSF1R")
 
+t_cell_data <- FetchData(Dendritic_Cells_fil, vars = c(gene_list, 'Dendritic_official'))
+
+patient_avg <- data.frame()
+n <- 1 # number of metadata columns
+
+for (id in levels(factor(t_cell_data$Dendritic_official))) {
+  data_subset <- t_cell_data %>% filter(Dendritic_official == id)
+  data_subset_avg <- apply(data_subset[,1:(ncol(data_subset)-n)], 2, mean)
+  patient_avg <- rbind(patient_avg, data_subset_avg)
+}
+
+colnames(patient_avg) <- colnames(t_cell_data)[1:(ncol(t_cell_data)-n)]
+rownames(patient_avg) <- levels(factor(t_cell_data$Dendritic_official))
+# adding Simple annotations 
+
+metadata <- unique(t_cell_data %>% select( 'Dendritic_official'))
+metadata <- metadata[order(metadata$Dendritic_official, decreasing = T),]
+rownames(metadata) <- metadata$Dendritic_official
+metadata$ID <- NULL
+
+my_colour = list(DiseaseState = c(AdjNorm = "#080808", PDAC = "#D8D5D5"),
+                 Stage = c(Resectable = '#33a02c', 
+                           Locally_Advanced = '#b2df8a',
+                           Borderline_Resectable = '#1f78b4',
+                           Metastatic = '#fb9a99', 
+                           `N/A` = '#a6cee3'))
 
 # Figure 6C
 
@@ -2251,13 +2459,110 @@ DotPlot(PBMC_Merge_Fil, features = c( "CD4","FCGR3B","NKG7", "NCAM1", "CD8A", "C
 
 # Supplementary Figure S3C
 
+#PBMC pheatmap of checkpoints by cell population
+gene_list <- c("CD27", "TNFRSF4", "CTLA4", "ICOS", "CD28", "CD40LG", "CD47", "TIGIT", "TNFRSF18", "CD70", "PDCD1", "LAG3", "CSF1", "CD274", "TNFSF18", "HAVCR2", "SIRPA", "PVR", "ICOSLG", "CD40", "TNFSF4", "LGALS9", "CD80", "HLA-DQA1")
+
+
+pbmc_data <- FetchData(PBMC_Merge_Fil, vars = c(gene_list, 'Collapsed_labels_nospaces'))
+
+pbmc_avg <- data.frame()
+n <- 1 # number of metadata columns
+
+for (id in levels(factor(pbmc_data$Collapsed_labels_nospaces))) {
+  data_subset <- pbmc_data %>% filter(Collapsed_labels_nospaces == id)
+  data_subset_avg <- apply(data_subset[,1:(ncol(data_subset)-n)], 2, mean)
+  pbmc_avg <- rbind(pbmc_avg, data_subset_avg)
+}
+
+colnames(pbmc_avg) <- colnames(pbmc_data)[1:(ncol(pbmc_data)-n)]
+rownames(pbmc_avg) <- levels(factor(pbmc_data$Collapsed_labels_nospaces))
+# adding Simple annotations 
+
+metadata <- unique(pbmc_data %>% select('Collapsed_labels_nospaces'))
+#metadata <- metadata[order(metadata$DiseaseState, metadata$Stage, decreasing = T),]
+rownames(metadata) <- metadata$Collapsed_labels_nospaces
+#metadata$Collapsed_labels_nospaces <- NULL
+
+my_colour = list(Collapsed_labels_nospaces = c("CD4_T" = "limegreen", "CD8_T" = "darkgreen", "Monocyte" = "darkorange2", "Granulocyte" = "orange1", "B_Cell" = "gold1", "Plasma_Cell" = "lightgoldenrod1", "pDC" = "darkturquoise", "NK_Cell" = "darkorchid"))
+
+
+pheatmap(as.matrix(pbmc_avg), fontsize = 14, color = colorRampPalette(colors = c('#0000FF','#FFFFFF','#FF0000'))(250),
+         annotation_colors = my_colour, border_color = 'black', cellwidth = 20, cellheight = 20, scale = 'column')
 
 
 # Supplementary Figure S3D
 
+#pheatmap of checkpoints with stage and disease state
+gene_list <- c("CD40LG", "CD28", "CD47", "ICOS", "CSF1", "CTLA4", "CD27", "TNFRSF4", "TNFRSF18", "PDCD1", "TIGIT", "HAVCR2", "LAG3")
 
+t_cell_data <- FetchData(CD8_subset_pbmc_new, vars = c(gene_list, 'ID', 'DiseaseState', 'Stage'))
+
+patient_avg <- data.frame()
+n <- 3 # number of metadata columns
+
+for (id in levels(factor(t_cell_data$ID))) {
+  data_subset <- t_cell_data %>% filter(ID == id)
+  data_subset_avg <- apply(data_subset[,1:(ncol(data_subset)-n)], 2, mean)
+  patient_avg <- rbind(patient_avg, data_subset_avg)
+}
+
+colnames(patient_avg) <- colnames(t_cell_data)[1:(ncol(t_cell_data)-n)]
+rownames(patient_avg) <- levels(factor(t_cell_data$ID))
+# adding Simple annotations 
+
+metadata <- unique(t_cell_data %>% select('ID', 'DiseaseState', 'Stage'))
+metadata <- metadata[order(metadata$DiseaseState, metadata$Stage, decreasing = T),]
+rownames(metadata) <- metadata$ID
+metadata$ID <- NULL
+
+my_colour = list(DiseaseState = c(Healthy = "#080808", PDA = "#D8D5D5"),
+                 Stage = c(Resectable = '#33a02c', 
+                           Locally_Advanced = '#b2df8a',
+                           Borderline_Resectable = '#1f78b4',
+                           Metastatic = '#fb9a99', 
+                           `N/A` = '#a6cee3'))
+
+
+pheatmap(as.matrix(patient_avg), fontsize = 14, color = colorRampPalette(colors = c('#0000FF','#FFFFFF','#FF0000'))(250), annotation_row = metadata,
+         annotation_colors = my_colour, border_color = 'black', cellwidth = 20, cellheight = 20, scale = 'column')
 
 # Supplementary Figure S3E
+
+gene_list <- c("GIMAP7", "CCR7", "CMC1", "HLA-DQA2", "KLRB1", "DUSP1", "JUNB", "BTG1", "DUSP2", "CXCR4", "CD69", 
+               "MYBL1", "PIK3R1", "CNOT6L", "TXNIP", "PRDM1", "MAP3K8", "SOCS1", "TNFAIP3", "TMEM2", "AIM1", "FGFBP2", "DDIT4",
+               "CCL4", "METRNL", "SYTL3", "SH2D2A", "XIST", "NFKBIA", "NBEAL1", "CD74")
+
+
+t_cell_data <- FetchData(CD8_subset_pbmc_new, vars = c(gene_list, 'ID', 'DiseaseState', 'Stage'))
+
+patient_avg <- data.frame()
+n <- 3 # number of metadata columns
+
+for (id in levels(factor(t_cell_data$ID))) {
+  data_subset <- t_cell_data %>% filter(ID == id)
+  data_subset_avg <- apply(data_subset[,1:(ncol(data_subset)-n)], 2, mean)
+  patient_avg <- rbind(patient_avg, data_subset_avg)
+}
+
+colnames(patient_avg) <- colnames(t_cell_data)[1:(ncol(t_cell_data)-n)]
+rownames(patient_avg) <- levels(factor(t_cell_data$ID))
+# adding Simple annotations 
+
+metadata <- unique(t_cell_data %>% select('ID', 'DiseaseState', 'Stage'))
+metadata <- metadata[order(metadata$DiseaseState, metadata$Stage, decreasing = T),]
+rownames(metadata) <- metadata$ID
+metadata$ID <- NULL
+
+my_colour = list(DiseaseState = c(Healthy = "#080808", PDA = "#D8D5D5"),
+                 Stage = c(Resectable = '#33a02c', 
+                           Locally_Advanced = '#b2df8a',
+                           Borderline_Resectable = '#1f78b4',
+                           Metastatic = '#fb9a99', 
+                           `N/A` = '#a6cee3'))
+
+
+pheatmap(as.matrix(patient_avg), fontsize = 14, color = colorRampPalette(colors = c('#0000FF','#FFFFFF','#FF0000'))(250), annotation_row = metadata,
+         annotation_colors = my_colour, border_color = 'black', cellwidth = 20, cellheight = 20, scale = 'column')
 
 
 
@@ -2269,15 +2574,42 @@ FeaturePlot(CD8_T_cell_subset_fil, c("CD3D","PDCD1","LAG3","TIGIT","HAVCR2",
 
 # Supplementary Figure S4C
 
+gene_list <- c("HLA-DPA1","TIGIT","KLRF1","CD27","GPR183","KLRC3","PPP1R14B","TNFRSF18","EOMES","KLF2","ITGB2","IFI44L","KLRG1","HAVCR2",
+               "CLDND1","HLA-DPB1","GZMK","TCF7","ADAM28","CD74","RNF130","IFITM3","IRS2","TRIM56","ATHL1","NBEAL2","BCL2A1","LAT2","NLRC5",
+               "FAM65B","VNN2","PTGER2","CD40LG","GZMB","IL7R","PTGER4","TNFRSF25","CSF1","S100A6","SLC4A10","KLRC1","CCR6","S100A4","TOB1",
+               "KLRB1","GABARAPL1","LGALS1","GFPT2","PRF1","TMEM173","AIM1","APBA2","RORA","LTB","LGALS3","BTG1","DRAXIN","NCR3","HERPUD1",
+               "H1FX","CXCR4","TMEM66","PFN1")
 
+Idents(CD8_T_cell_subset_fil) <- "CD8_expanded"
+t_cell_data <- FetchData(CD8_T_cell_subset_fil, vars = c(gene_list, 'CD8_expanded'))
+
+patient_avg <- data.frame()
+n <- 3 # number of metadata columns
+
+for (id in levels(factor(t_cell_data$CD8_expanded))) {
+  data_subset <- t_cell_data %>% filter(CD8_expanded == id)
+  data_subset_avg <- apply(data_subset[,1:(ncol(data_subset)-n)], 2, mean)
+  patient_avg <- rbind(patient_avg, data_subset_avg)
+}
+
+colnames(patient_avg) <- colnames(t_cell_data)[1:(ncol(t_cell_data)-n)]
+rownames(patient_avg) <- levels(factor(t_cell_data$CD8_expanded))
+# adding Simple annotations 
+
+metadata <- unique(t_cell_data %>% select('CD8_expanded'))
+rownames(metadata) <- metadata$CD8_expanded
+metadata$CD8_expanded <- NULL
+
+pheatmap(as.matrix(patient_avg), fontsize = 14, color = colorRampPalette(colors = c('#60158C','#FF2800','#FFEA79'))(250), annotation_row = metadata,
+        border_color = 'black', cellwidth = 20, cellheight = 20, scale = 'column')
 
 # Supplementary Figure S5A
 
 Idents(Myeloid_subset_fil) <- "Myeloid_subset_labels_expanded"
 Myeloid_subset_fil <- RenameIdents(Myeloid_subset_fil,"Resident Macrophages_PDAC" = "1",
                                    "Resident Macrophages_AdjNorm" = "2", 
-                                   "Classical Macrophages (CCR2+)_PDAC" = "3", 
-                                   "Classical Macrophages (CCR2+)_AdjNorm" = "4", 
+                                   "Classical Monocytes_PDAC" = "3", 
+                                   "Classical Monocytes_AdjNorm" = "4", 
                                    "Alternatively Activated Macrophages_PDAC" = "5", 
                                    "Alternatively Activated Macrophages_AdjNorm" = "6", "Granulocyte 2_PDAC" = "7",                          
                                    "Granulocyte 2_AdjNorm" = "8",                       
@@ -2295,10 +2627,78 @@ VlnPlot(Myeloid_subset_fil, features = c("CD274", "LGALS9","PVR","TNFSF4","SIRPA
 
 # Supplementary Figure S5B
 
+gene_list <- c("TNFSF4","PVR", "TNFSF18", "ICOSLG", "CD80", "CD274", "CSF1R",  "LGALS9", "CD40", "HLA-DQA1", "SIRPA")
+
+Idents(object = Myeloid_subset_fil) <- 'Myeloid_subset_labels_expanded'
+Mac_object <- subset(x = Myeloid_subset_fil, subset = c("Alternatively Activated Macrophages 1", "Alternatively Activated Macrophages 2","Resident Macrophages"))
+Mac_data <- FetchData(Mac_object, vars = c(gene_list, 'ID', 'DiseaseState', 'Stage'))
+
+patient_avg <- data.frame()
+n <- 3 # number of metadata columns
+
+for (id in levels(factor(Mac_data$ID))) {
+  data_subset <- Mac_data %>% filter(ID == id)
+  data_subset_avg <- apply(data_subset[,1:(ncol(data_subset)-n)], 2, mean)
+  patient_avg <- rbind(patient_avg, data_subset_avg)
+}
+
+colnames(patient_avg) <- colnames(Mac_data)[1:(ncol(Mac_data)-n)]
+rownames(patient_avg) <- levels(factor(Mac_data$ID))
+# adding Simple annotations 
+
+metadata <- unique( %>% select('ID', 'DiseaseState', 'Stage'))
+metadata <- metadata[order(metadata$DiseaseState, metadata$Stage, decreasing = T),]
+rownames(metadata) <- metadata$ID
+metadata$ID <- NULL
+
+my_colour = list(DiseaseState = c(AdjNorm = "#080808", PDAC = "#D8D5D5"),
+                 Stage = c(Resectable = '#33a02c', 
+                           Locally_Advanced = '#b2df8a',
+                           Borderline_Resectable = '#1f78b4',
+                           Metastatic = '#fb9a99', 
+                           `N/A` = '#a6cee3'))
+
+
+pheatmap(as.matrix(patient_avg), fontsize = 14, color = colorRampPalette(colors = c('#0000FF','#FFFFFF','#FF0000'))(250), annotation_row = metadata,
+         annotation_colors = my_colour, border_color = 'black', cellwidth = 20, cellheight = 20, scale = 'column')
 
 
 # Supplementary Figure S5C
 
+gene_list <- c("TNFSF4","PVR", "TNFSF18", "ICOSLG", "CD80", "CD274", "CSF1R",  "LGALS9", "CD40", "HLA-DQA1", "SIRPA")
+
+Idents(object = Myeloid_subset_fil) <- 'Myeloid_subset_labels_expanded'
+Gran_object <- subset(x = Myeloid_subset_fil, subset = c("Granulocyte 1","Granulocyte 2"))
+Gran_data <- FetchData(Gran_object, vars = c(gene_list, 'ID', 'DiseaseState', 'Stage'))
+
+patient_avg <- data.frame()
+n <- 3 # number of metadata columns
+
+for (id in levels(factor(Gran_data$ID))) {
+  data_subset <- Gran_data %>% filter(ID == id)
+  data_subset_avg <- apply(data_subset[,1:(ncol(data_subset)-n)], 2, mean)
+  patient_avg <- rbind(patient_avg, data_subset_avg)
+}
+
+colnames(patient_avg) <- colnames(Gran_data)[1:(ncol(Gran_data)-n)]
+rownames(patient_avg) <- levels(factor(Gran_data$ID))
+# adding Simple annotations 
+
+metadata <- unique( %>% select('ID', 'DiseaseState', 'Stage'))
+metadata <- metadata[order(metadata$DiseaseState, metadata$Stage, decreasing = T),]
+rownames(metadata) <- metadata$ID
+metadata$ID <- NULL
+
+my_colour = list(DiseaseState = c(AdjNorm = "#080808", PDAC = "#D8D5D5"),
+                 Stage = c(Resectable = '#33a02c', 
+                           Locally_Advanced = '#b2df8a',
+                           Borderline_Resectable = '#1f78b4',
+                           Metastatic = '#fb9a99', 
+                           `N/A` = '#a6cee3'))
+
+
+pheatmap(as.matrix(patient_avg), fontsize = 14, color = colorRampPalette(colors = c('#0000FF','#FFFFFF','#FF0000'))(250), annotation_row = metadata,
+         annotation_colors = my_colour, border_color = 'black', cellwidth = 20, cellheight = 20, scale = 'column')
 
 
 # Supplementary Figure S5E
