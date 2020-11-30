@@ -1141,7 +1141,7 @@ for(i in 1:length(var)){
   total <- sum(var)
   numerator <- sum(var[1:i])
   expvar <- numerator/total
-  if(End == 0){
+  if(EndVar == 0){
     if(expvar > 0.9){
       EndVar <- EndVar + 1
       PCNum <- i
